@@ -1,0 +1,7 @@
+uint8 TYPE_FIND=0
+uint8 TYPE_FIND_ONE=1
+uint8 type
+string collection
+string query
+---
+string json
