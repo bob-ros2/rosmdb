@@ -99,8 +99,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-t', '--type', type=str, default="find_one",
         choices=['find', 'find_one', 'insert_one'],
-        help="type of operation, available "
-            "are 'find', 'find_one', 'insert_one'")
+        help="type of operation")
     choices = {'find':0, 'find_one':1, 'insert_one':2}
     args, remaining = parser.parse_known_args()
 
