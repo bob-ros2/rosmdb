@@ -9,7 +9,7 @@ without using the pre configured metadata schema template.
 This ROS Node meets the following requirements
 - Use MongoDB as storage
 - Operation modes
-  - Can store data alongside with metadata by default in a [basic schema template](#Helper-script-genmeta.sh)
+  - Can store data alongside with metadata by default in a [basic schema template](#helper-script-genmetash)
   - Can store data also in raw format by configuration without metadata (raw=True)
 - Data can be saved as simple String or complex JSON document
 - Additional metadata key\/value pairs can be added
@@ -122,7 +122,6 @@ options:
   -c COLLECTION, --collection COLLECTION
                         used MogoDB collection (default: memories)
   -j JSON, --json JSON  JSON to be used for choosen type. Can be passed via stdin. (default: )
-  -f FILE, --file FILE  path to file to insert into MongoDB (default: )
   -t {find,find_one,insert_one}, --type {find,find_one,insert_one}
                         type of operation (default: find_one)
 
