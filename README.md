@@ -132,10 +132,11 @@ of the regular std_msg/String type.
 
 How to use the ROS action interface can be seen in the also provided CLI ROS 
 Node under [scripts/cli.py](scripts/cli.py)
-This is the preferable way to communicate with the RosMDB Node.
+Via Action Service is the preferable way to communicate with the RosMDB Node.
 
 To insert data via the json topic a simple std_msgs/String publisher can be used. 
-If the string is JSON parsable in will be handled as object, otherwise it will be treated as string. 
+If the string is JSON parsable in will be handled as object, otherwise it will 
+be treated as string. 
 For this method no response is available about the state of the insert_one operation.
 
 How to use a ROS service interface can be found in the ROS documentation [https://ros.org](https://ros.org)
