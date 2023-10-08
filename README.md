@@ -55,8 +55,20 @@ colcon build
 
 ### Usage
 ```bash
-# start the node.
+# start node.
 $ ros2 run rosmdb metadb.py
+
+# start node with setting default_collection
+$ ros2 run rosmdb metadb.py --ros-args -p default_collection:=memo_media
+
+# start in debug mode
+$ ros2 run rosmdb metadb.py --ros-args --log-level debug
+
+# insert_one service call using command line
+$ ros2 service call /insert rosmdb/srv/Insert "{collection: persons, json: '{\"data\":\"pete\"}'}"
+
+# query service call using command line
+ros2 service call /query rosmdb/srv/Query "{type: 1, collection: persons, query: '{\"_id\":\"65228c4a9244d375f83788cb\"}'}"
 ```
 ### Node Parameter
 
