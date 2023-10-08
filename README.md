@@ -8,6 +8,7 @@ without using the pre configured metadata schema template.
 
 This ROS Node meets the following requirements:
 - Use MongoDB as storage
+- One single ROS Package repository
 - Operation modes:
   - Can store data alongside with metadata by default in a [basic schema template](#helper-script-genmetash)
   - Can store data in raw format by configuration without metadata (raw=True)
@@ -117,6 +118,9 @@ $ ros2 run rosmdb cli.py -t find_one -j '{"_id": "651de93bbfe1f5c4df74e77a"}'
 ```
 
 ### About Client Host and Message Definitions
+
+Usually custom Message Definitions should have their own ROS Package. In RosMDB 
+they are present in the same package to meet the requirements.
 
 If the client application runs on a different host than the RosMDB server and the actions 
 or services want to be used the RosMDB package must also exist on that client host.\
