@@ -122,7 +122,8 @@ If the client application runs on a different host than the RosMDB server and th
 or services want to be used the RosMDB package must also exist on that client host.\
 If not using metadb.py on the client host no special dependencies are needed to 
 build the package.\
-The CLI can still be used as it has no special dependencies other than the Message Definitions.
+The CLI can still be used as it has no special dependencies other than the 
+RosMDB Message Definitions.
 
 The topic insert_one interface can be used without the RosMDB package because it makes use 
 of the regular std_msg/String type.
