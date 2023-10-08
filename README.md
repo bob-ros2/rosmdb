@@ -55,11 +55,11 @@ colcon build
 
 ### Usage
 ```bash
-# start node.
+# start node
 $ ros2 run rosmdb metadb.py
 
 # start node with setting default_collection
-$ ros2 run rosmdb metadb.py --ros-args -p default_collection:=memo_media
+$ ros2 run rosmdb metadb.py --ros-args -p default_collection:=persons
 
 # start in debug mode
 $ ros2 run rosmdb metadb.py --ros-args --log-level debug
@@ -104,19 +104,32 @@ Query MongoDB data. See [srv/Query.srv](srv/Query.srv) for details.
 Query MongoDB data. See [action/Query.action](action/Query.action) for details.
 
 > ~insert  (action/Insert)\
-Insert data into MongoDB data. See [action/Insert.action](action/Insert.action) for details.
+Insert data into MongoDB data. 
+See [action/Insert.action](action/Insert.action) for details.
 
 ### ObjectId searching
 
-The function json.loads can't handle ObjectId syntax. Because of this RosMDB substitutes the _id value as ObjectId.\
+The function json.loads can't handle ObjectId syntax. Because of this RosMDB 
+substitutes the _id value as ObjectId.\
 Searching for ObjectId can be done in the following way:
 ```bash
 $ ros2 run rosmdb cli.py -t find_one -j '{"_id": "651de93bbfe1f5c4df74e77a"}'
 ```
 
+### About Client Host and Message Definitions
+
+If the client application runs on a different host than the RosMDB server and the actions 
+or services want to be used the RosMDB package must also exist on that client host.\
+If not using metadb.py on the client host also no special dependencies are needed.\
+The CLI can still be used as it has no special dependencies other than the Message Definitions.
+
+The topic interface can be used without the RosMDB package because it makes use 
+of the std_msg/String type.
+
 ### Programming example
 
-How to use the ROS action interface can be seen in the also provided CLI ROS Node under [scripts/cli.py](scripts/cli.py)
+How to use the ROS action interface can be seen in the also provided CLI ROS 
+Node under [scripts/cli.py](scripts/cli.py)
 This is the preferable way to communicate with the RosMDB Node.
 
 To insert data via the json topic a simple std_msgs/String publisher can be used. 
