@@ -6,11 +6,11 @@ save any kind of JSON data together with metadata.\
 On the other hand it should also be possible to store any kind of structure 
 without using the pre configured metadata schema template.
 
-This ROS Node meets the following requirements
+This ROS Node meets the following requirements:
 - Use MongoDB as storage
-- Operation modes
+- Operation modes:
   - Can store data alongside with metadata by default in a [basic schema template](#helper-script-genmetash)
-  - Can store data also in raw format by configuration without metadata (raw=True)
+  - Can store data in raw format by configuration without metadata (raw=True)
 - Data can be saved as simple String or complex JSON document
 - Additional metadata key\/value pairs can be added
 - Parallel processing per interface (all use an own ReentrantCallbackGroup)
@@ -19,9 +19,10 @@ This ROS Node meets the following requirements
 - Debug capabilities
 - Collection control
   - Configurable default collection
-  - Optionally override default collection
+  - Optionally override default collection (depends on used interface)
 - Insert_one interfaces
-  - By topic
+  - By ROS topic
+  - By ROS service
   - By ROS action
   - By CLI application
 - Find and find_one interfaces
@@ -53,10 +54,9 @@ colcon build
 ## ROS Node MetaDB
 
 ### Usage
-
 ```bash
 # start the node.
-ros2 run rosmdb metadb.py
+$ ros2 run rosmdb metadb.py
 ```
 ### Node Parameter
 
@@ -94,16 +94,24 @@ Query MongoDB data. See [action/Query.action](action/Query.action) for details.
 > ~insert  (action/Insert)\
 Insert data into MongoDB data. See [action/Insert.action](action/Insert.action) for details.
 
+### ObjectId searching
+
+The function json.loads can't handle ObjectId syntax. Because of this RosMDB substitutes the _id value as ObjectId.\
+Searching for ObjectId can be done in the following way:
+```bash
+$ ros2 run rosmdb cli.py -t find_one -j '{"_id": "651de93bbfe1f5c4df74e77a"}'
+```
+
 ### Programming example
 
-How to use the action interface can best be seen in the also provided CLI ROS Node under [scripts/cli.py](scripts/cli.py)
+How to use the ROS action interface can be seen in the also provided CLI ROS Node under [scripts/cli.py](scripts/cli.py)
 This is the preferable way to communicate with the RosMDB Node.
 
-To insert via the json topic a simple std_msgs/String publisher can be used. 
+To insert data via the json topic a simple std_msgs/String publisher can be used. 
 If the string is JSON parsable in will be handled as object, otherwise it will be treated as string. 
-With this method no response is available about the state of the insert_one operation.
+For this method no response is available about the state of the insert_one operation.
 
-How to use a ROS service can be found in the ROS documentation [https://ros.org](https://ros.org)
+How to use a ROS service interface can be found in the ROS documentation [https://ros.org](https://ros.org)
 
 
 ## ROS Node CLI
@@ -112,7 +120,7 @@ How to use a ROS service can be found in the ROS documentation [https://ros.org]
 
 ```bash
 # help
-ros2 run rosmdb cli.py -h
+$ ros2 run rosmdb cli.py -h
 usage: cli.py [-h] [-c COLLECTION] [-j JSON] [-f FILE] [-t {find,find_one,insert_one}]
 
 CLI for ROS Node RosMDB.
@@ -125,17 +133,17 @@ options:
   -t {find,find_one,insert_one}, --type {find,find_one,insert_one}
                         type of operation (default: find_one)
 
-# searching for ObjectId
-ros2 run rosmdb cli.py --type find_one --json '{"_id": "651de93bbfe1f5c4df74e77a"}'
+# searching for ObjectId, RosMDB substitutes _id value as ObjectId
+$ ros2 run rosmdb cli.py --type find_one --json '{"_id": "651de93bbfe1f5c4df74e77a"}'
 
 # insert a new record, if successfull insert_id will be returned
-ros2 run rosmdb cli.py --type insert_one --json '{"data": "hello there"}'
+$ ros2 run rosmdb cli.py --type insert_one --json '{"data": "hello there"}'
 
 # with piped query available for all types
-cat json.txt | ros2 run rosmdb cli.py -t find_one
+$ cat json.txt | ros2 run rosmdb cli.py -t find_one
 
 # start in debug mode
-ros2 run rosmdb cli.py -t insert_one -j '{"data": "hey"}' --ros-args --log-level debug
+$ ros2 run rosmdb cli.py -t insert_one -j '{"data": "hey"}' --ros-args --log-level debug
 ```
 
 ## Helper script genmeta.sh
@@ -155,7 +163,7 @@ $ ros2 run rosmdb genmeta.sh '"myData"'
           { "key": "frame_id", "value": "rosmdb" },
           { "key": "tags", "value": [] }
     ],
-    "data": "myData",
+    "data": "myData"
 }
 
 # generate JSON with nested dictionary data

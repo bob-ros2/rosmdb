@@ -21,6 +21,7 @@ from std_msgs.msg import String, Header
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.action import ActionServer
 from rosmdb.srv import Query
+from rosmdb.srv import Insert
 from rosmdb.action import Insert as InsertAction
 from rosmdb.action import Query as QueryAction
 
@@ -64,7 +65,7 @@ class MetaDB():
                 time.time_ns() / 1000000000)
             record.update(data)
         
-        insert_id = self.db[collection].insert_one(record).inserted_id
+        insert_id = str(self.db[collection].insert_one(record).inserted_id)
         if self.node: 
             self.node.get_logger().debug(
                 'InsertId: %s Data: %s' % (insert_id, str(record)))
@@ -119,8 +120,12 @@ class MetaDBNode(Node):
             'json', self.sub_json_callback, 10,
             callback_group=ReentrantCallbackGroup())
         
-        self.srv = self.create_service(Query, 
+        self.srv_query = self.create_service(Query, 
             'query', self.srv_query_callback,
+            callback_group=ReentrantCallbackGroup())
+        
+        self.srv_insert = self.create_service(Insert, 
+            'insert', self.srv_insert_callback,
             callback_group=ReentrantCallbackGroup())
         
         self.action_query = ActionServer(self, QueryAction, 
@@ -177,7 +182,7 @@ class MetaDBNode(Node):
                 request.json, request.collection, self.raw)
         except Exception as e: 
             self.get_logger().error(str(e))
-            return None
+            return ""
 
     def srv_query_callback(self, request, response):
         """Callback which listen for find_one service call."""
@@ -186,6 +191,15 @@ class MetaDBNode(Node):
         self.get_logger().debug('Query: %s' % request.query)
         response.json = self.db_query(request)
         self.get_logger().debug('Result: %s' % response.json)
+        return response
+    
+    def srv_insert_callback(self, request, response):
+        """Callback which listen for insert_one service call."""
+        self.get_logger().info('Call Insert service %s %s' 
+            % (str(request.collection), request.json))
+        self.get_logger().debug('Insert: %s' % request.json)
+        response.insert_id = self.db_insert(request)
+        self.get_logger().debug('Result: %s' % response.insert_id)
         return response
 
     def action_query_callback(self, target_handle):
@@ -208,7 +222,7 @@ class MetaDBNode(Node):
         insert_id = self.db_insert(target_handle.request)
         target_handle.succeed()
         result = InsertAction.Result()
-        result.insert_id = str(insert_id)
+        result.insert_id = insert_id
         return result
 
 

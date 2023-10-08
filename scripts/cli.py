@@ -37,7 +37,6 @@ class MDBActionClient(Node):
         while self.running:
             rclpy.spin_once(self, timeout_sec=0.001)
 
-
     def send_query(self, collection, type, query):
         goal_msg = Query.Goal()
         goal_msg.type = type
@@ -113,6 +112,7 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(1)
 
-    rclpy.init(args=None)
-    n = MDBActionClient('rosmdb_cli', args.collection, choices[args.type], args.json)
+    rclpy.init(args=sys.argv)
+    n = MDBActionClient(
+        'rosmdb_cli', args.collection, choices[args.type], args.json)
     rclpy.shutdown()

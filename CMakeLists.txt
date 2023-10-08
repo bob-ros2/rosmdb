@@ -15,6 +15,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/Query.srv"
+  "srv/Insert.srv"
   "action/Query.action"
   "action/Insert.action"
   DEPENDENCIES builtin_interfaces std_msgs action_msgs
