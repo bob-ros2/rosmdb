@@ -120,11 +120,12 @@ $ ros2 run rosmdb cli.py -t find_one -j '{"_id": "651de93bbfe1f5c4df74e77a"}'
 
 If the client application runs on a different host than the RosMDB server and the actions 
 or services want to be used the RosMDB package must also exist on that client host.\
-If not using metadb.py on the client host also no special dependencies are needed.\
+If not using metadb.py on the client host no special dependencies are needed to 
+build the package.\
 The CLI can still be used as it has no special dependencies other than the Message Definitions.
 
-The topic interface can be used without the RosMDB package because it makes use 
-of the std_msg/String type.
+The topic insert_one interface can be used without the RosMDB package because it makes use 
+of the regular std_msg/String type.
 
 ### Programming example
 
