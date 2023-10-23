@@ -24,7 +24,6 @@ kv_pairs() {
     echo -e "$KVPAIRS"
 }
 
-
 cat <<EOF
 {
     "metadata": [
