@@ -69,7 +69,7 @@ $ ros2 run rosmdb metadb.py --ros-args --log-level debug
 $ ros2 service call /insert rosmdb/srv/Insert "{collection: persons, json: '{\"data\":\"pete\"}'}"
 
 # query service call using command line
-ros2 service call /query rosmdb/srv/Query "{type: 1, collection: persons, query: '{\"_id\":\"65228c4a9244d375f83788cb\"}'}"
+$ ros2 service call /query rosmdb/srv/Query "{type: 1, collection: persons, query: '{\"_id\":\"65228c4a9244d375f83788cb\"}'}"
 ```
 ### Node Parameter
 
@@ -98,6 +98,9 @@ the string is stored in a default data structure.
 
 > ~query (srv/Query)\
 Query MongoDB data. See [srv/Query.srv](srv/Query.srv) for details.
+
+> ~insert (srv/Insert)\
+Insert data into MongoDB. See [srv/Insert.srv](srv/Insert.srv) for details.
 
 ### Actions
 
@@ -130,7 +133,7 @@ The CLI can still be used as it has no special dependencies other than the
 RosMDB Message Definitions.
 
 The topic insert_one interface can be used without the RosMDB package because it makes use 
-of the regular std_msg/String type.
+of the regular std_msgs/String type.
 
 ### Programming example
 
@@ -139,7 +142,7 @@ Node under [scripts/cli.py](scripts/cli.py)\
 Via ROS Actions is the preferable way to communicate with the RosMDB Node.
 
 To insert data via the json topic a simple std_msgs/String publisher can be used. 
-If the string is JSON parsable in will be handled as object, otherwise it will 
+If the string is JSON parsable it will be handled as object, otherwise it will 
 be treated as string. 
 For this method no response is available about the state of the insert_one operation.
 
@@ -153,17 +156,23 @@ How to use a ROS service interface can be found in the ROS documentation [https:
 ```bash
 # help
 $ ros2 run rosmdb cli.py -h
-usage: cli.py [-h] [-c COLLECTION] [-j JSON] [-f FILE] [-t {find,find_one,insert_one}]
+usage: cli.py [-h] [-c COLLECTION] [-j JSON] [-t {find,find_one,insert_one}] [-k [KEY=VALUE ...]] [-m {$and,$nor,$or}] [-v]
 
-CLI for ROS Node RosMDB.
+CLI for ROS Node MetaDB.
 
 options:
   -h, --help            show this help message and exit
   -c COLLECTION, --collection COLLECTION
                         used MogoDB collection (default: memories)
-  -j JSON, --json JSON  JSON to be used for choosen type. Can be passed via stdin. (default: )
+  -j JSON, --json JSON  JSON to be used for choosen type. Can be passed via stdin (default: )
   -t {find,find_one,insert_one}, --type {find,find_one,insert_one}
                         type of operation (default: find_one)
+  -k [KEY=VALUE ...], --keys [KEY=VALUE ...]
+                        key value pair(s) to find or find_one, overrides JSON input.
+                        Can contain also regex in form /regex/ for key or value fields (default: [])
+  -m {$and,$nor,$or}, --match {$and,$nor,$or}
+                        match type of key/value list. (default: $and)
+  -v, --verbose         Switch on verbose mode. (default: False)
 
 # searching for ObjectId, RosMDB substitutes _id value as ObjectId
 $ ros2 run rosmdb cli.py --type find_one --json '{"_id": "651de93bbfe1f5c4df74e77a"}'
