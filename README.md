@@ -170,8 +170,6 @@ options:
   -k [KEY=VALUE ...], --keys [KEY=VALUE ...]
                         key value pair(s) to find or find_one, overrides JSON input.
                         Can contain also regex in form /regex/ for key or value fields (default: [])
-  -m {$and,$nor,$or}, --match {$and,$nor,$or}
-                        match type of key/value list. (default: $and)
   -v, --verbose         Switch on verbose mode. (default: False)
 
 # searching for ObjectId, RosMDB substitutes _id value as ObjectId
