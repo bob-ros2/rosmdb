@@ -153,7 +153,7 @@ class MetaDBNode(Node):
             msg.data = json.dumps({
                 "metadata": [
                     {"key": "stamp", "value": float("%d.%09d" 
-                        % (header.stamp.sec, msg.header.stamp.nanosec))},
+                        % (header.stamp.sec, header.stamp.nanosec))},
                     {"key": "frame_id", "value": header.frame_id},
                     {"key": "tags", "value": [header.frame_id]},
                 ],
